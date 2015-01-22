@@ -10,8 +10,8 @@ FF_URL="http://www.ingress.com/intel?ll=49.884386,10.89515&z=14"
 SCREENSHOT_INTERVAL=60
 
 # Dimensions of screenshot (cropped)
-SCREENSHOT_WIDTH=1280
-SCREENSHOT_HEIGHT=720
+SCREENSHOT_WIDTH=3840
+SCREENSHOT_HEIGHT=2160
 
 # Crop offset for screenshot
 SCREENSHOT_OFFSET_LEFT=220
@@ -23,9 +23,7 @@ XVFB_RES_HEIGHT=`expr $SCREENSHOT_HEIGHT + 2 \* $SCREENSHOT_OFFSET_TOP`
 XVFB_DISPLAY=23
 
 #Setting for timestamp
-TIMESTAMP=false
-TIMESTAMP_SIZE=12
-TIMESTAMP_FORMAT=`date +"%d-%m-%Y %H:%M:%S"`
+TIMESTAMP=true
 
 while getopts ":t" opt; do
     case $opt in
@@ -43,12 +41,13 @@ Xvfb :${XVFB_DISPLAY} -screen 0 ${XVFB_RES_WIDTH}x${XVFB_RES_HEIGHT}x24 -noreset
 XVFB_PID=$!
 
 add_timestamp () {
-    img_name=$1
-    XTEXT=`expr $SCREENSHOT_WIDTH - 50`
-    YTEXT=`expr $SCREENSHOT_HEIGHT + 175`
-    STRINGTEXT="text $XTEXT,$YTEXT '"
-    STRINGTEXT="$STRINGTEXT$TIMESTAMP_FORMAT'"
-    convert -pointsize $TIMESTAMP_SIZE -fill yellow -draw "$STRINGTEXT" $img_name $img_name
+	img_name=$1
+	XTEXT=`expr $SCREENSHOT_WIDTH - 50`
+	YTEXT=`expr $SCREENSHOT_HEIGHT + 175`
+	STRINGTEXT="text $XTEXT,$YTEXT '"
+	PRETTY_DATE=`date +"%d-%m-%Y %H:%M:%S"`
+	STRINGTEXT="$STRINGTEXT$PRETTY_DATE'"
+	convert -pointsize 20 -fill yellow -draw "$STRINGTEXT" $img_name $img_name
 }
 
 while true
